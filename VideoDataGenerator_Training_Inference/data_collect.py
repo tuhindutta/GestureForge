@@ -11,9 +11,10 @@ from utils.hand_detect import HandDetectCoords
 parser = argparse.ArgumentParser(
     prog='lndmrk',
     description='Collect hand landmark data for gesture classification.',
-    epilog='Example: python data_collect.py label_example -n 10 -f 20 -bp -r -N -a -A'
+    epilog='Example: python data_collect.py label_example -d 0 -n 10 -f 20 -bp -r -N -a -A'
     )
 parser.add_argument('label', type=str, help="Label for the current sample")
+parser.add_argument('-d', '--video_device', type=int, default=0, help="Video device")
 parser.add_argument('-n', '--num_of_samples', type=int, default=8, help="Number of samples to record")
 parser.add_argument('-f', '--num_of_frames', type=int, default=18, help="Number of frames/video to record")
 parser.add_argument('-bp', '--record_both_palms', action='store_true', help="Enable both palms recording mode")
@@ -25,6 +26,7 @@ parser.add_argument('-A', '--record_only_arm_coords', action='store_true', defau
 
 args = parser.parse_args()
 label = args.label
+video_device = args.video_device
 no_of_frames_per_video = args.num_of_frames
 record_both_palms = args.record_both_palms
 record_data = args.record
@@ -95,7 +97,7 @@ for _ in range(no_of_samples_required):
     if (present_count < no_of_samples_required) or not record_data:
 
 
-        cam = cv2.VideoCapture(0)
+        cam = cv2.VideoCapture(video_device)
 
         frame_count = 1
 
