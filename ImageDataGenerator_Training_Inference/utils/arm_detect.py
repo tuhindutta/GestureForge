@@ -20,11 +20,9 @@ class ArmDetect:
       pose_landmarks_list = detection_result.pose_landmarks
       annotated_image = np.copy(rgb_image)
     
-      # Loop through the detected poses to visualize.
       for idx in range(len(pose_landmarks_list)):
         pose_landmarks = pose_landmarks_list[idx]
     
-        # Draw the pose landmarks.
         pose_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
         pose_landmarks_proto.landmark.extend([
           landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in pose_landmarks
@@ -37,7 +35,6 @@ class ArmDetect:
       return annotated_image
 
     def __get_landmarks(self, image:np.ndarray):
-        # img = cv2.flip(image, 1)
         img = mp.Image(image_format=mp.ImageFormat.SRGB, data=image)
         detection_result = self.detector.detect(img)
         return detection_result
@@ -45,7 +42,6 @@ class ArmDetect:
     def annotate(self, image:np.ndarray):
         annotated = image.copy()
         annotated = self.__draw_landmarks_on_image(annotated, self.__get_landmarks(image))
-        # annotated = cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB)
         return annotated
 
     def convert_coords_to_array_for_training(self, image:np.ndarray):
@@ -53,7 +49,6 @@ class ArmDetect:
         side2_detected = False
 
         lndmrks = self.__get_landmarks(image)
-        # print(lndmrks.pose_landmarks)
         
         if lndmrks and (len(lndmrks.pose_landmarks)>0):
             side1, side2 = [12,14,16,18,20,22], [11,13,15,17,19,21]
@@ -78,7 +73,6 @@ class ArmDetect:
             
             if side1_detected:
                 side1_ref = side1_coords.pop(ref_idx)
-                # side1_detected = True
                 side1_x = [i[0] for i in side1_coords if i]
                 side1_y = [i[1] for i in side1_coords if i]
                 side1_z = [i[2] for i in side1_coords if i]
@@ -97,7 +91,6 @@ class ArmDetect:
 
             if side2_detected:
                 side2_ref = side2_coords.pop(ref_idx)
-                # side2_detected = True
                 side2_x = [i[0] for i in side2_coords if i]
                 side2_y = [i[1] for i in side2_coords if i]
                 side2_z = [i[2] for i in side2_coords if i]

@@ -53,7 +53,6 @@ def predict(probs, label_encoder, encoded=False):
 
 cam = cv2.VideoCapture(0)
 
-# array = []
 prediction = 'Predicting...'
 
 while True:

@@ -4,17 +4,8 @@ import os
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from sklearn.ensemble import RandomForestClassifier
-# import yaml
 import json
 
-
-# try:
-#     with open('train_config.yaml', 'r') as file:
-#         config = yaml.safe_load(file)
-# except FileNotFoundError:
-#     print("Error: 'config.yaml' not found.")
-# except yaml.YAMLError as e:
-#     print(f"Error parsing YAML: {e}")
 
 output_dir = 'outputs'
 

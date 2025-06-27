@@ -13,11 +13,11 @@ parser = argparse.ArgumentParser(
     description='Collect hand landmark data for gesture classification.',
     epilog='Example: python data_collect.py label_example -n 10 -f 20 -bp -r -N -a -A'
     )
-parser.add_argument('label', type=str, help="Label for the current sample")  # positional argument
+parser.add_argument('label', type=str, help="Label for the current sample")
 parser.add_argument('-n', '--num_of_samples', type=int, default=8, help="Number of samples to record")
-parser.add_argument('-f', '--num_of_frames', type=int, default=18, help="Number of frames/video to record")  # optional with default
-parser.add_argument('-bp', '--record_both_palms', action='store_true', help="Enable both palms recording mode")  # flag: True if present
-parser.add_argument('-r', '--record', action='store_true', help="Start recording")  # flag: True if present
+parser.add_argument('-f', '--num_of_frames', type=int, default=18, help="Number of frames/video to record")
+parser.add_argument('-bp', '--record_both_palms', action='store_true', help="Enable both palms recording mode")
+parser.add_argument('-r', '--record', action='store_true', help="Start recording")
 parser.add_argument('-N', '--create_new_data_file', action='store_true', default=False, help="Remove the old data and create new file")
 parser.add_argument('-a', '--record_arm_coords', action='store_true', default=False, help="Record arm coordinates")
 parser.add_argument('-A', '--record_only_arm_coords', action='store_true', default=False, help="Record only arm coordinates")
@@ -63,7 +63,6 @@ metadata.loc[len(metadata)] = [label, no_of_frames_per_video, record_both_palms,
                                record_arm_coords, record_only_arm_coords]
 metadata.to_csv(metadata_path, index=False)
 
-# print(label, no_of_samples_required, no_of_frames_per_video, both_hands, record_data, create_new_data)
 def data_shape_match(shape):
     if shape == 156:
         return 'record_arm_coords'
@@ -134,7 +133,6 @@ for _ in range(no_of_samples_required):
                 break
 
         cam.release()
-        # out.release()
         cv2.destroyAllWindows()
 
         if (len(array) == no_of_frames_per_video) and record_data:

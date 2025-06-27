@@ -57,8 +57,6 @@ class PalmDetect:
                       self.__mp_drawing_styles.get_default_hand_landmarks_style(),
                       self.__mp_drawing_styles.get_default_hand_connections_style())
 
-            # for hand_landmark in hand_landmarks:
-                # hand_landmark = 
                 x = [lndmrk.x for lndmrk in landmark.landmark]
                 y = [lndmrk.y for lndmrk in landmark.landmark]
 
@@ -67,9 +65,6 @@ class PalmDetect:
                 min_x = int(np.min(x)*image_width)-10
                 min_y = int(np.min(y)*image_height)-10
                 
-                # center = np.array([np.mean(x)*image_width, np.mean(y)*image_height]).astype('int32')
-                # cv2.circle(image, tuple(center), 10, (255,0,0), 1)  #for checking the center 
-                # cv2.rectangle(annotated_image, (center[0]-200,center[1]-200), (center[0]+200,center[1]+200), (255,0,0), 1)
                 if bbox: 
                     cv2.rectangle(annotated_image, (min_x, max_y), (max_x, min_y), (255,0,0), 2)
                 if text:
@@ -146,7 +141,6 @@ class PalmDetect:
                 right = [-1]*60
                     
         else:
-            # detected = False
             left = [-1]*60
             right = [-1]*60
 
