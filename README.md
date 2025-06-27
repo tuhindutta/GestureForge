@@ -1,12 +1,12 @@
-# GestureForge
+# 🖐️ GestureForge
 
 End‑to‑end toolkit for collecting hand‑gesture landmark data, training gesture‑recognition models, and exporting ready‑to‑deploy ONNX weights.
 
-## Overview
+## 📌 Overview
 GestureForge lets you quickly record palm/arm landmarks (image or video), train a model (Random‑Forest for images, GRU for sequences), sanity‑check the result, ready to export portable ONNX weights for C++ / Web / Edge deployment.
 
-## Directory Layout
-```sql
+## 📂 Directory Layout
+```yaml
 GestureForge/
 │   .gitignore
 │   LICENSE                                  # MIT or Apache 2.0 (your pick)
@@ -38,7 +38,7 @@ GestureForge/
         └── trainer.py                       # trainer_classes
 ```
 
-## Prerequisites
+## ⚙️ Prerequisites
 #### 1️⃣ Python 3.11 virtual‑env
 ```bash
 python3.11 -m venv .venv
@@ -51,7 +51,7 @@ source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-## Quick Start
+## 🚀 Quick Start
 #### 1️⃣ Image‑Gesture Workflow (single frame)
 ```bash
 cd ImageDataGenerator_Training_Inference
@@ -83,7 +83,7 @@ python train.py         # writes model.pt & label_encoder.pkl
 python inference.py
 ```
 
-## Landmark Pipeline
+## 🔄 Landmark Pipeline
 ```txt
 MediaPipe (raw landmarks)
    └─ palm_detect  →  palm tensor  (scaled + normalised)
@@ -96,7 +96,7 @@ MediaPipe (raw landmarks)
 - Detects only Arms.
 - Detects Arms along with Palms.
 
-## Training Details
+## 🧠 Training Details
 #### Random‑Forest (Images)
 - `sklearn.ensemble.RandomForestClassifier` with default hyper‑params
 - Works well because static landmark vectors are highly separable across gestures.
@@ -117,12 +117,12 @@ MediaPipe (raw landmarks)
     early_stopping_toll: 4
   ```
 
-## Model Quality Check
+## 🔍 Model Quality Check
 Both pipelines include an `inference.py` script that reproduces preprocessing and runs the freshly‑trained model to ensure data & training are correct before downstream deployment.
 
-## Contributing
+## 🤝 Contributing
 Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes. For more details and updates, visit the [GitHub Repository](https://github.com/tuhindutta/GestureForge).
 
-## Acknowledgements
+## 🙏 Acknowledgements
 - Google MediaPipe team for awesome real‑time landmark tracking
 - PyTorch & scikit‑learn communities for the ML backbone
