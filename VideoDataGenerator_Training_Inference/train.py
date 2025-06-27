@@ -67,7 +67,7 @@ def determine_early_stop(accuracies, early_stopping_accuracy_thresh, early_stopp
             early_stop = True            
     return early_stop
 
-for epoch in tqdm(range(epochs)):
+for epoch in range(epochs):
     if not determine_early_stop(accuracies, early_stopping_accuracy_thresh, early_stopping_toll):
         model.train()
         total_loss = 0
