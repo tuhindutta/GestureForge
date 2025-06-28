@@ -17,7 +17,6 @@ GestureForge/
 │   ├── data_collect.py                      # record single‑frame samples
 │   ├── train.py                             # RandomForest pipeline
 │   ├── inference.py                         # quick accuracy sanity‑check
-│   ├── train_config.yaml                    # (unused — RF uses defaults)
 │   ├── outputs/                             # pickles + encoders after each run
 │   └── utils/                               # utilities
 │       ├── arm_detect.py                    # arm_detect
@@ -105,16 +104,17 @@ MediaPipe (raw landmarks)
 - Input shape `(batch, seq_len, features)`
 - Configurable via `train_config.yaml`:
   ```yaml
-  data:
-  batch_size: 3
-  model:
-    gru_hidden_size: 32
-    gru_num_layers: 2
-  training:
-    epochs: 20
-    learning_rate: 1e-3
-    early_stopping_accuracy_thresh: 0.05
-    early_stopping_toll: 4
+    data:
+      batch_size: 2
+    model:
+      bidirectional_gru: false
+      gru_hidden_size: 32
+      gru_num_layers: 2
+    training:
+      epochs: 100
+      learning_rate: 1e-3
+      early_stopping_accuracy_thresh: false
+      early_stopping_toll: 4
   ```
 
 ## 🔍 Model Quality Check
