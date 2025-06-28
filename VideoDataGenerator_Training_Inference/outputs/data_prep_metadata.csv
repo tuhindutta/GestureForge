@@ -1,3 +1,3 @@
 label,no_of_frames_per_video,record_both_palms,record_data,no_of_samples_required,create_new_data_file,record_arm_coords,record_only_arm_coords
-thumbs_up,18,False,True,8,True,False,False
-help,18,False,True,8,False,False,False
+bye,50,False,True,4,True,False,False
+come,50,False,True,4,False,False,False

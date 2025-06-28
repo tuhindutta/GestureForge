@@ -20,12 +20,11 @@ class HandDetectCoords:
         return side1_detected, side2_detected, coords
 
     def convert_coords_to_array_for_training(self, image):
-        left_detected, right_detected, palm_coords = self.detect_palm(image)
+        left_detected, right_detected, palm_ref1, palm_ref2, palm_ref1_image_size, palm_ref2_image_size, palm_coords = self.detect_palm(image)
         palm_coords = palm_coords[:123]
-        side1_detected, side2_detected, arm_coords = self.detect_arm(image)
+        side1_detected, side2_detected, arm_ref1, arm_ref2, arm_ref1_image_size, arm_ref2_image_size, arm_coords = self.detect_arm(image)
         arm_coords = arm_coords[123:] if self.consider_palm_and_arm else arm_coords
-        coords =  arm_coords + palm_coords
-        return left_detected, right_detected, side1_detected, side2_detected, palm_coords+arm_coords
+        return left_detected, right_detected, palm_ref1, palm_ref2, palm_ref1_image_size, palm_ref2_image_size, side1_detected, side2_detected, arm_ref1, arm_ref2, arm_ref1_image_size, arm_ref2_image_size, palm_coords+arm_coords
 
     def annotate(self, image):
         annotated = image.copy()

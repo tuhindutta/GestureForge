@@ -1,10 +1,11 @@
 data:
-  batch_size: 3
+  batch_size: 2
 model:
+  bidirectional_gru: false
   gru_hidden_size: 32
   gru_num_layers: 2
 training:
-  epochs: 20
+  epochs: 100
   learning_rate: 1e-3
-  early_stopping_accuracy_thresh: 0.05
+  early_stopping_accuracy_thresh: false
   early_stopping_toll: 4

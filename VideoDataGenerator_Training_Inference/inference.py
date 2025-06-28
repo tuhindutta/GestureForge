@@ -43,10 +43,9 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model = torch.jit.load(os.path.join(output_dir, 'model.pt'))
 
 def predict(logits:torch.Tensor, label_encoder, encoded=False):
-    probs = torch.nn.functional.softmax(logits)
+    probs = torch.nn.functional.softmax(logits, dim=1)
     predicted_label_idx = torch.argmax(probs).numpy().reshape((-1))
     conf = probs.detach().numpy()[0][predicted_label_idx]
-    print(logits, conf)
     if encoded:
         label = predicted_label_idx[0]
     else:
@@ -59,6 +58,8 @@ model.eval()
 cam = cv2.VideoCapture(video_device)
 
 array = []
+initial_ref1, initial_ref2 = np.array([0,0,0]), np.array([0,0,0])
+initial_ref1_image_size, initial_ref2_image_size = 0, 0
 prediction = 'Predicting...'
 
 while True:
@@ -71,21 +72,22 @@ while True:
     
     if predict_palm_and_arm_gesture:
         detector = hand
-        sequence_length = 156
-        left_detected, right_detected, side1_detected, side2_detected, coords = detector.convert_coords_to_array_for_training(frame)
+        sequence_length = 156 + 6 + 6
+        left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, side1_detected, side2_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
         palm_detect_condition = left_detected and right_detected if record_both_palms else left_detected or right_detected
         arm_detect_condition = side1_detected or side2_detected
         frame_detect_condition = palm_detect_condition and arm_detect_condition
     elif predict_only_arm_gesture:
         detector = arm
-        sequence_length = 33
-        side1_detected, side2_detected, coords = detector.convert_coords_to_array_for_training(frame)
+        sequence_length = 33 + 6
+        side1_detected, side2_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
         frame_detect_condition = side1_detected or side2_detected
     else:
         detector = palm
-        sequence_length = 123
-        left_detected, right_detected,  coords = detector.convert_coords_to_array_for_training(frame)
-        frame_detect_condition = left_detected and right_detected if record_both_palms else left_detected or right_detected
+        sequence_length = 123 + 6
+        left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
+        both_palms_detected = left_detected and right_detected
+        frame_detect_condition = both_palms_detected if record_both_palms else ((left_detected or right_detected) and not both_palms_detected)
 
     if frame_detect_condition:
 
@@ -93,8 +95,24 @@ while True:
             frame = detector.annotate(frame)
         else:
             frame = cv2.flip(frame, 1)
-            
-        array.append(coords)
+        
+        ref1 = np.array(ref1)
+        ref2 = np.array(ref2)
+        if len(array) == 0:
+            velocity_ref1 = list(initial_ref1)
+            velocity_ref2 = list(initial_ref2)
+        else:
+            ref1_mean_img_size = (initial_ref1_image_size + ref1_image_size)/2
+            ref2_mean_img_size = (initial_ref2_image_size + ref2_image_size)/2
+            velocity_ref1 = [i/ref1_mean_img_size if ref1_mean_img_size > 0 else i for i in list(ref1 - initial_ref1)]
+            velocity_ref2 = [i/ref2_mean_img_size if ref2_mean_img_size > 0 else i for i in list(ref2 - initial_ref2)]
+
+        initial_ref1 = ref1
+        initial_ref2 = ref2
+        initial_ref1_image_size = ref1_image_size
+        initial_ref2_image_size = ref2_image_size          
+
+        array.append(coords + velocity_ref1 + velocity_ref2)
 
         if len(array) % num_of_frames == 0:
             coords_tensor = torch.tensor(np.array(array).reshape((1,num_of_frames,sequence_length)),
@@ -104,6 +122,8 @@ while True:
             if conf >= confidence_thresh:
                 prediction = f"{predicted}: {int(conf*100)}%"
             array = []
+            initial_ref1, initial_ref2 = np.array([0,0,0]), np.array([0,0,0])
+            initial_ref1_image_size, initial_ref2_image_size = 0, 0
     else:
         frame = cv2.flip(frame, 1)
 

@@ -3,7 +3,7 @@
 End‑to‑end toolkit for collecting hand‑gesture landmark data, training gesture‑recognition models, and exporting ready‑to‑deploy ONNX weights.
 
 ## 📌 Overview
-GestureForge lets you quickly record palm/arm landmarks (image or video), train a model (Random‑Forest for images, GRU for sequences), sanity‑check the result, ready to export portable ONNX weights for C++ / Web / Edge deployment.
+GestureForge lets you quickly record palm/arm landmarks (static and dynamic gestures), train a model (Random‑Forest for static, GRU for dynamic gestures), sanity‑check the result, and use the trained model for export as portable ONNX weights, enabling deployment across C++, web, and edge environments.
 
 ## 📂 Directory Layout
 ```yaml

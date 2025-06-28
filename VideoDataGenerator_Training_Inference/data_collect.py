@@ -101,30 +101,50 @@ for _ in range(no_of_samples_required):
 
         frame_count = 1
 
+        initial_ref1, initial_ref2 = np.array([0,0,0]), np.array([0,0,0])
+        initial_ref1_image_size, initial_ref2_image_size = 0, 0
+
         while (frame_count <= no_of_frames_per_video):
             ret, frame = cam.read()
 
             if record_only_arm_coords:
                 detector = arm
-                side1_detected, side2_detected, coords = detector.convert_coords_to_array_for_training(frame)
+                side1_detected, side2_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
                 frame_detect_condition = side1_detected or side2_detected
             elif record_arm_coords:
                 detector = hand
-                left_detected, right_detected, side1_detected, side2_detected, coords = detector.convert_coords_to_array_for_training(frame)
+                left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, side1_detected, side2_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
                 palm_detect_condition = left_detected and right_detected if record_both_palms else left_detected or right_detected
                 arm_detect_condition = side1_detected or side2_detected
                 frame_detect_condition = palm_detect_condition and arm_detect_condition
             else:
                 detector = palm
-                left_detected, right_detected,  coords = detector.convert_coords_to_array_for_training(frame)
-                frame_detect_condition = left_detected and right_detected if record_both_palms else left_detected or right_detected
+                left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
+                both_palms_detected = left_detected and right_detected
+                frame_detect_condition = both_palms_detected if record_both_palms else ((left_detected or right_detected) and not both_palms_detected)
 
-            assert (len(coords) == data_shape) or (data_shape == -1), f"Data record should be for {data_shape_match(data_shape)}"
+            assert (len(coords)+6 == data_shape) or (data_shape == -1), f"Data record should be for {data_shape_match(data_shape)}"
 
             if frame_detect_condition:
-                frame_count += 1
-                array.append(coords)
                 frame = detector.annotate(frame)
+                ref1 = np.array(ref1)
+                ref2 = np.array(ref2)
+                if frame_count == 1:
+                    velocity_ref1 = list(initial_ref1)
+                    velocity_ref2 = list(initial_ref2)
+                else:
+                    ref1_mean_img_size = (initial_ref1_image_size + ref1_image_size)/2
+                    ref2_mean_img_size = (initial_ref2_image_size + ref2_image_size)/2
+                    velocity_ref1 = [i/ref1_mean_img_size if ref1_mean_img_size > 0 else i for i in list(ref1 - initial_ref1)]
+                    velocity_ref2 = [i/ref2_mean_img_size if ref2_mean_img_size > 0 else i for i in list(ref2 - initial_ref2)]
+
+                initial_ref1 = ref1
+                initial_ref2 = ref2
+                initial_ref1_image_size = ref1_image_size
+                initial_ref2_image_size = ref2_image_size
+                print(velocity_ref1, velocity_ref2)
+                array.append(coords + velocity_ref1 + velocity_ref2)
+                frame_count += 1
 
             else:
                 frame = cv2.flip(frame, 1)
