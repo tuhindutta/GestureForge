@@ -40,7 +40,7 @@ with open(os.path.join(output_dir, 'label_encoder.pkl'),'rb') as f:
     label_encoder = pickle.load(f)
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
-model = torch.jit.load(os.path.join(output_dir, 'model.pt'))
+model = torch.jit.load(os.path.join(output_dir, 'model.pt')).to(device)
 
 def predict(logits:torch.Tensor, label_encoder, encoded=False):
     probs = torch.nn.functional.softmax(logits, dim=1)
@@ -116,7 +116,7 @@ while True:
 
         if len(array) % num_of_frames == 0:
             coords_tensor = torch.tensor(np.array(array).reshape((1,num_of_frames,sequence_length)),
-                                         dtype=torch.float32)
+                                         dtype=torch.float32, device=device)
 
             predicted, conf = predict(model(coords_tensor), label_encoder)
             if conf >= confidence_thresh:
