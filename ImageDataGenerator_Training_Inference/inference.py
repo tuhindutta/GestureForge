@@ -69,7 +69,7 @@ while True:
     
     if predict_palm_and_arm_gesture:
         detector = hand
-        sequence_length = 156 + 6 + 6
+        # sequence_length = 156 + 6
         left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, side1_detected, side2_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
         both_palms_detected = left_detected and right_detected
         palm_detect_condition = both_palms_detected if record_both_palms else ((left_detected or right_detected) and not both_palms_detected)
@@ -78,12 +78,13 @@ while True:
         frame_detect_condition = palm_detect_condition and arm_detect_condition
     elif predict_only_arm_gesture:
         detector = arm
-        sequence_length = 33 + 6
+        # sequence_length = 33 + 6
+        side1_detected, side2_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
         both_arms_detected = side1_detected and side2_detected
         frame_detect_condition = both_arms_detected if record_both_arms else ((side1_detected or side1_detected) and not both_arms_detected)
     else:
         detector = palm
-        sequence_length = 123 + 6
+        # sequence_length = 123 + 6
         left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
         both_palms_detected = left_detected and right_detected
         frame_detect_condition = both_palms_detected if record_both_palms else ((left_detected or right_detected) and not both_palms_detected)

@@ -68,11 +68,11 @@ metadata.loc[len(metadata)] = [label, no_of_frames_per_video, record_both_palms,
 metadata.to_csv(metadata_path, index=False)
 
 def data_shape_match(shape):
-    if shape == 156:
+    if shape == 156 + 6:
         return 'record_arm_coords'
-    elif shape == 33:
+    elif shape == 33 + 6:
         return 'record_only_arm_coords'
-    elif shape == 123:
+    elif shape == 123 + 6:
         return 'record_only_palm_coords'
 
 for _ in range(no_of_samples_required):
@@ -147,7 +147,6 @@ for _ in range(no_of_samples_required):
                 initial_ref2 = ref2
                 initial_ref1_image_size = ref1_image_size
                 initial_ref2_image_size = ref2_image_size
-                print(velocity_ref1, velocity_ref2)
                 array.append(coords + velocity_ref1 + velocity_ref2)
                 frame_count += 1
 

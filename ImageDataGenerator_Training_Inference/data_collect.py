@@ -96,12 +96,12 @@ while (frame_count <= no_of_frames_per_video) or not record_data:
 
     if record_only_arm_coords:
         detector = arm
-        side1_detected, side2_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
+        side1_detected, side2_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
         both_arms_detected = side1_detected and side2_detected
         frame_detect_condition = both_arms_detected if record_both_arms else ((side1_detected or side1_detected) and not both_arms_detected)
     elif record_arm_coords:
         detector = hand
-        left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, side1_detected, side2_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
+        left_detected, right_detected, _, _, _, _, side1_detected, side2_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
         both_palms_detected = left_detected and right_detected
         palm_detect_condition = both_palms_detected if record_both_palms else ((left_detected or right_detected) and not both_palms_detected)
         both_arms_detected = side1_detected and side2_detected
@@ -109,7 +109,7 @@ while (frame_count <= no_of_frames_per_video) or not record_data:
         frame_detect_condition = palm_detect_condition and arm_detect_condition
     else:
         detector = palm
-        left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
+        left_detected, right_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
         both_palms_detected = left_detected and right_detected
         frame_detect_condition = both_palms_detected if record_both_palms else ((left_detected or right_detected) and not both_palms_detected)
 
