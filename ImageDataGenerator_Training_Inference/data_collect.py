@@ -11,12 +11,13 @@ from utils.hand_detect import HandDetectCoords
 parser = argparse.ArgumentParser(
     prog='lndmrk',
     description='Collect hand landmark data for gesture classification.',
-    epilog='Example: python data_collect.py label_example -d 0 -f 20 -bp -r -N -a -A'
+    epilog='Example: python data_collect.py label_example -d 0 -f 20 -bp -ba -r -N -a -A'
     )
 parser.add_argument('label', type=str, help="Label for the current sample")
 parser.add_argument('-d', '--video_device', type=int, default=0, help="Video device")
 parser.add_argument('-f', '--num_of_frames', type=int, default=18, help="Number of frames/video to record")
 parser.add_argument('-bp', '--record_both_palms', action='store_true', help="Enable both palms recording mode")
+parser.add_argument('-ba', '--record_both_arms', action='store_true', help="Enable both arms recording mode")
 parser.add_argument('-r', '--record', action='store_true', help="Start recording")
 parser.add_argument('-N', '--create_new_data_file', action='store_true', default=False, help="Remove the old data and create new file")
 parser.add_argument('-a', '--record_arm_coords', action='store_true', default=False, help="Record arm coordinates")
@@ -28,6 +29,7 @@ label = args.label
 video_device = args.video_device
 no_of_frames_per_video = args.num_of_frames
 record_both_palms = args.record_both_palms
+record_both_arms = args.record_both_arms
 record_data = args.record
 create_new_data_file = args.create_new_data_file
 record_arm_coords = args.record_arm_coords
@@ -94,18 +96,22 @@ while (frame_count <= no_of_frames_per_video) or not record_data:
 
     if record_only_arm_coords:
         detector = arm
-        side1_detected, side2_detected, coords = detector.convert_coords_to_array_for_training(frame)
-        frame_detect_condition = side1_detected or side2_detected
+        side1_detected, side2_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
+        both_arms_detected = side1_detected and side2_detected
+        frame_detect_condition = both_arms_detected if record_both_arms else ((side1_detected or side1_detected) and not both_arms_detected)
     elif record_arm_coords:
         detector = hand
-        left_detected, right_detected, side1_detected, side2_detected, coords = detector.convert_coords_to_array_for_training(frame)
-        palm_detect_condition = left_detected and right_detected if record_both_palms else left_detected or right_detected
-        arm_detect_condition = side1_detected or side2_detected
+        left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, side1_detected, side2_detected, _, _, _, _, coords = detector.convert_coords_to_array_for_training(frame)
+        both_palms_detected = left_detected and right_detected
+        palm_detect_condition = both_palms_detected if record_both_palms else ((left_detected or right_detected) and not both_palms_detected)
+        both_arms_detected = side1_detected and side2_detected
+        arm_detect_condition = both_arms_detected if record_both_arms else ((side1_detected or side1_detected) and not both_arms_detected)
         frame_detect_condition = palm_detect_condition and arm_detect_condition
     else:
         detector = palm
-        left_detected, right_detected,  coords = detector.convert_coords_to_array_for_training(frame)
-        frame_detect_condition = left_detected and right_detected if record_both_palms else left_detected or right_detected
+        left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords = detector.convert_coords_to_array_for_training(frame)
+        both_palms_detected = left_detected and right_detected
+        frame_detect_condition = both_palms_detected if record_both_palms else ((left_detected or right_detected) and not both_palms_detected)
 
     assert (len(coords) == data_shape) or (data_shape == -1), f"Data record should be for {data_shape_match(data_shape)}"
 
