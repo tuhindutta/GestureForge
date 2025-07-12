@@ -34,7 +34,8 @@ GestureForge/
         ├── arm_detect.py                    # arm_detect
         ├── hand_detect.py                   # hand_detect
         ├── palm_detect.py                   # palm_detect
-        └── trainer.py                       # trainer_classes
+        ├── trainer.py                       # trainer_classes
+        └── pose_landmarker_heavy.task 
 ```
 
 ## ⚙️ Prerequisites
