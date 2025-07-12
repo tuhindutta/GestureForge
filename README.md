@@ -127,3 +127,25 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 ## 🙏 Acknowledgements
 - Google MediaPipe team for awesome real‑time landmark tracking
 - PyTorch & scikit‑learn communities for the ML backbone
+
+## 🔮 Future Prospects
+GestureForge is built as a modular utility framework to streamline the process of recording, training, and validating hand gesture recognition models using landmark data. While the current implementation focuses on preparing models for accuracy verification and proof-of-concept testing, it lays the foundation for several impactful extensions in the future:
+- 🚀 Quick Training for Real-world Applications
+  - Enables rapid training of lightweight models (like RandomForest or GRU) on custom gestures, tailored to specific domains.
+  - Helps developers and researchers prototype gesture-controlled interfaces without deep ML expertise.
+- 📱 Edge & Embedded System Deployment
+  - With lightweight models and structured landmark-based input, it becomes feasible to deploy trained models on microcontrollers, Raspberry Pi, or edge AI devices.
+  - This opens doors to offline gesture-controlled IoT applications without reliance on cloud processing.
+- 🌐 Integration with Internal Networks & Smart Environments
+  - Can be embedded in internal enterprise systems to control operations via hand gestures — ideal for touchless interaction in secure or sterile environments.
+  - Extendable to internal automation tools, remote devices, or closed-network industrial use-cases using IoT hubs.
+- 🧠 Emergency Gesture Detection via CCTV Integration
+  - GestureForge can power gesture-based emergency response systems using existing CCTV infrastructure.
+  - Trained models can be embedded into surveillance workflows to allow people to silently signal distress or request help by making recognizable gestures in view of a camera.
+  - This enables automated invocation of emergency protocols in public places like train stations, hospitals, campuses, or offices, thus providing an inclusive, silent, and accessible form of communication in critical moments.
+- 🖥️ Cross-platform Support
+  - Future ONNX export support (under development) allows integration with C++ or JavaScript runtimes for native desktop or web-based gesture controls.
+- 📦 Custom Dataset & Gesture Expansion
+  - Offers flexibility to continually update gesture datasets, enabling adaptation for different languages, sign systems, or domain-specific controls.
+- 🧩 Plugin-based Architecture Possibility
+  - Can evolve into a plugin-ready ecosystem where developers can swap detection logic, models, and inference layers based on the use case (e.g., robotics, home automation, AR/VR).
