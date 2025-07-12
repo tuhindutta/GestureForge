@@ -92,8 +92,8 @@ MediaPipe (raw landmarks)
             → final hand vector      #  used by trainer / inference
 ```
 #### Frame acceptance rules configured per run:
-- By default, palms are always detected unless stated otherwise.
-- Detects only Arms.
+- By default, palms are always detected unless stated otherwise. (_Either detect single or both palms_)
+- Detects only Arms. (_Either detect single or both arms_)
 - Detects Arms along with Palms.
 
 ## 🧠 Training Details
