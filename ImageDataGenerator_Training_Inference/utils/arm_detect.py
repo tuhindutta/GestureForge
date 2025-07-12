@@ -22,7 +22,7 @@ class ArmDetect:
     
       for idx in range(len(pose_landmarks_list)):
         pose_landmarks = pose_landmarks_list[idx]
-    
+
         pose_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
         pose_landmarks_proto.landmark.extend([
           landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in pose_landmarks
@@ -42,6 +42,7 @@ class ArmDetect:
     def annotate(self, image:np.ndarray):
         annotated = image.copy()
         annotated = self.__draw_landmarks_on_image(annotated, self.__get_landmarks(image))
+        annotated = cv2.flip(annotated, 1)
         return annotated
 
     def convert_coords_to_array_for_training(self, image:np.ndarray):
@@ -88,6 +89,8 @@ class ArmDetect:
                 side1_rel_coords = [tuple(i/side1_image_size) if i is not None else (-1,-1,-1) for i in side1_rel_coords]
             else:
                 side1_rel_coords = [-1]*15
+                side1_ref = tuple([-1]*3)
+                side1_image_size = 0
 
             if side2_detected:
                 side2_ref = side2_coords.pop(ref_idx)
@@ -106,6 +109,8 @@ class ArmDetect:
                 side2_rel_coords = [tuple(i/side2_image_size) if i is not None else (-1,-1,-1) for i in side2_rel_coords]
             else:
                 side2_rel_coords = [-1]*15
+                side2_ref = tuple([-1]*3)
+                side2_image_size = 0
 
             ref_diff = list(np.array(side1_ref) - np.array(side2_ref)) if side1_detected and side2_detected else [-1]*3
 
@@ -113,5 +118,17 @@ class ArmDetect:
             coords = [i[0] for i in np.array(coords).reshape(-1,1)] + ref_diff
 
         else:
-            side1_detected, side2_detected, coords = False, False, [-1]*33
-        return side1_detected, side2_detected, coords
+            side1_detected = False
+            side2_detected = False
+            coords = [-1]*33
+            side1_ref = tuple([-1]*3)
+            side2_ref = tuple([-1]*3)
+            side1_image_size = 0
+            side2_image_size = 0
+
+        ref1 = side1_ref
+        ref2 = side2_ref
+        ref1_image_size = side1_image_size
+        ref2_image_size = side2_image_size
+
+        return side1_detected, side2_detected, ref1, ref2, ref1_image_size, ref2_image_size, coords

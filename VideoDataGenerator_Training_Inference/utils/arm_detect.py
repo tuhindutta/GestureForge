@@ -42,6 +42,7 @@ class ArmDetect:
     def annotate(self, image:np.ndarray):
         annotated = image.copy()
         annotated = self.__draw_landmarks_on_image(annotated, self.__get_landmarks(image))
+        annotated = cv2.flip(annotated, 1)
         return annotated
 
     def convert_coords_to_array_for_training(self, image:np.ndarray):

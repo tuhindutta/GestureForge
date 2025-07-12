@@ -5,7 +5,7 @@ model:
   gru_hidden_size: 32
   gru_num_layers: 2
 training:
-  epochs: 100
+  epochs: 50
   learning_rate: 1e-3
   early_stopping_accuracy_thresh: false
   early_stopping_toll: 4

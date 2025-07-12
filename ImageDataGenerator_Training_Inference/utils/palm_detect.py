@@ -112,6 +112,8 @@ class PalmDetect:
                 left = self.__dic2array(left)
             else:
                 left = [-1]*60
+                left_wrist = tuple([-1]*3)
+                left_img_size = 0
                         
             right = landmarks.get('Right')
             if right:
@@ -139,10 +141,21 @@ class PalmDetect:
                 right = self.__dic2array(right)
             else:
                 right = [-1]*60
+                right_wrist = tuple([-1]*3)
+                right_img_size = 0
                     
         else:
             left = [-1]*60
             right = [-1]*60
+            left_wrist = tuple([-1]*3)
+            right_wrist = tuple([-1]*3)
+            left_img_size = 0
+            right_img_size = 0
+
+        ref1 = left_wrist
+        ref2 = right_wrist
+        ref1_image_size = left_img_size
+        ref2_image_size = right_img_size
 
         if left_detected and right_detected:
             left_right_mean_size = (left_img_size+right_img_size)/2
@@ -151,4 +164,4 @@ class PalmDetect:
         else:
             dist_bet_wrists = [-1,-1,-1]
             
-        return left_detected, right_detected, left+right+dist_bet_wrists
+        return left_detected, right_detected, ref1, ref2, ref1_image_size, ref2_image_size, left+right+dist_bet_wrists
