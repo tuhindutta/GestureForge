@@ -14,7 +14,7 @@ parser = argparse.ArgumentParser(
     epilog='Example: python inference.py -d 0 -f 18 -t -a -A -bp -ba -ant'
     )
 parser.add_argument('-d', '--video_device', type=int, default=0, help="Video device")
-parser.add_argument('-f', '--num_of_frames', type=int, default=18, help="Number of frames/video to record")
+# parser.add_argument('-f', '--num_of_frames', type=int, default=18, help="Number of frames/video to record")
 parser.add_argument('-t', '--confidence_thresh', type=float, default=0.5, help="Confidence threshold")
 parser.add_argument('-a', '--predict_palm_and_arm_gesture', action='store_true', help="Enable both hands recording mode")
 parser.add_argument('-A', '--predict_only_arm_gesture', action='store_true', help="Start recording")
@@ -24,7 +24,7 @@ parser.add_argument('-ant', '--annotate', action='store_true', help="Annotate th
 
 args = parser.parse_args()
 video_device = args.video_device
-num_of_frames = args.num_of_frames
+# num_of_frames = args.num_of_frames
 confidence_thresh = args.confidence_thresh
 predict_palm_and_arm_gesture = args.predict_palm_and_arm_gesture
 predict_only_arm_gesture = args.predict_only_arm_gesture

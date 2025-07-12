@@ -16,12 +16,12 @@ parser = argparse.ArgumentParser(
 parser.add_argument('label', type=str, help="Label for the current sample")
 parser.add_argument('-d', '--video_device', type=int, default=0, help="Video device")
 parser.add_argument('-f', '--num_of_frames', type=int, default=18, help="Number of frames/video to record")
+parser.add_argument('-a', '--record_arm_coords', action='store_true', default=False, help="Record arm coordinates")
+parser.add_argument('-A', '--record_only_arm_coords', action='store_true', default=False, help="Record only arm coordinates")
 parser.add_argument('-bp', '--record_both_palms', action='store_true', help="Enable both palms recording mode")
 parser.add_argument('-ba', '--record_both_arms', action='store_true', help="Enable both arms recording mode")
 parser.add_argument('-r', '--record', action='store_true', help="Start recording")
 parser.add_argument('-N', '--create_new_data_file', action='store_true', default=False, help="Remove the old data and create new file")
-parser.add_argument('-a', '--record_arm_coords', action='store_true', default=False, help="Record arm coordinates")
-parser.add_argument('-A', '--record_only_arm_coords', action='store_true', default=False, help="Record only arm coordinates")
 
 
 args = parser.parse_args()
